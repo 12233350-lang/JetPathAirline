@@ -8,17 +8,20 @@ import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
-import OpenAI from 'openai';
+
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder-key-replace-with-real-key'
+});
+
 
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Initialize OpenAI
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || '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',
-});
+
 
 const app = express();
 const port = process.env.PORT || 3001;
