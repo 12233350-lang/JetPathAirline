@@ -689,7 +689,18 @@ app.post('/api/Login/logout', authenticateToken, async (req, res) => {
 
 // ==================== FLIGHT ENDPOINTS ====================
 
-// POST /api/Flight/get-all-flights
+// GET/POST /api/Flight/get-all-flights
+app.get('/api/Flight/get-all-flights', async (req, res) => {
+  try {
+    const [flights] = await pool.execute('SELECT * FROM flights');
+    const flightsWithId = flights.map(flight => formatFlight(flight));
+    res.json({ data: flightsWithId, message: 'Success' });
+  } catch (error) {
+    console.error('Get all flights error:', error);
+    res.status(500).json({ data: null, message: error.message });
+  }
+});
+
 app.post('/api/Flight/get-all-flights', async (req, res) => {
   try {
     const [flights] = await pool.execute('SELECT * FROM flights');
@@ -1460,8 +1471,31 @@ app.delete('/api/Admin/delete-user/:id', authenticateToken, async (req, res) => 
 
 // ==================== LOCATION ENDPOINTS ====================
 
-// POST /api/Location/get-all-locations
+// GET/POST /api/Location/get-all-locations
 // Extract unique locations directly from flights table
+app.get('/api/Location/get-all-locations', async (req, res) => {
+  try {
+    // Get unique arrival locations from flights
+    const [flights] = await pool.execute('SELECT DISTINCT arrivalLocation, continent FROM flights WHERE arrivalLocation IS NOT NULL AND arrivalLocation != ""');
+    
+    // Format as location objects for compatibility with frontend
+    const locations = flights.map((flight, index) => ({
+      id: index + 1,
+      name: flight.arrivalLocation,
+      locationName: flight.arrivalLocation,
+      continent: flight.continent || 'Unknown',
+      country: flight.arrivalLocation, // Use arrivalLocation as country fallback
+      description: null,
+      imageUrl: null
+    }));
+
+    res.json({ data: locations, message: 'Success' });
+  } catch (error) {
+    console.error('Get all locations error:', error);
+    res.status(500).json({ data: null, message: error.message });
+  }
+});
+
 app.post('/api/Location/get-all-locations', async (req, res) => {
   try {
     // Get unique arrival locations from flights

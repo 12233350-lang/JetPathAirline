@@ -142,7 +142,7 @@ const App = () => {
     async function fetchLocations() {
       try {
         const response = await fetch(API_ENDPOINTS.GET_ALL_LOCATIONS, {
-          method: "POST",
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
@@ -163,7 +163,7 @@ const App = () => {
   async function fetchFlights() {
     try {
       const response = await fetch(API_ENDPOINTS.GET_ALL_FLIGHTS, {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
