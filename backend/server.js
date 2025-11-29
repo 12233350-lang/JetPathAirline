@@ -8,20 +8,17 @@ import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
-
-import OpenAI from "openai";
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder-key-replace-with-real-key'
-});
-
+import OpenAI from 'openai';
 
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-
+// Initialize OpenAI
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY || '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',
+});
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -689,18 +686,7 @@ app.post('/api/Login/logout', authenticateToken, async (req, res) => {
 
 // ==================== FLIGHT ENDPOINTS ====================
 
-// GET/POST /api/Flight/get-all-flights
-app.get('/api/Flight/get-all-flights', async (req, res) => {
-  try {
-    const [flights] = await pool.execute('SELECT * FROM flights');
-    const flightsWithId = flights.map(flight => formatFlight(flight));
-    res.json({ data: flightsWithId, message: 'Success' });
-  } catch (error) {
-    console.error('Get all flights error:', error);
-    res.status(500).json({ data: null, message: error.message });
-  }
-});
-
+// POST /api/Flight/get-all-flights
 app.post('/api/Flight/get-all-flights', async (req, res) => {
   try {
     const [flights] = await pool.execute('SELECT * FROM flights');
@@ -1471,31 +1457,8 @@ app.delete('/api/Admin/delete-user/:id', authenticateToken, async (req, res) => 
 
 // ==================== LOCATION ENDPOINTS ====================
 
-// GET/POST /api/Location/get-all-locations
+// POST /api/Location/get-all-locations
 // Extract unique locations directly from flights table
-app.get('/api/Location/get-all-locations', async (req, res) => {
-  try {
-    // Get unique arrival locations from flights
-    const [flights] = await pool.execute('SELECT DISTINCT arrivalLocation, continent FROM flights WHERE arrivalLocation IS NOT NULL AND arrivalLocation != ""');
-    
-    // Format as location objects for compatibility with frontend
-    const locations = flights.map((flight, index) => ({
-      id: index + 1,
-      name: flight.arrivalLocation,
-      locationName: flight.arrivalLocation,
-      continent: flight.continent || 'Unknown',
-      country: flight.arrivalLocation, // Use arrivalLocation as country fallback
-      description: null,
-      imageUrl: null
-    }));
-
-    res.json({ data: locations, message: 'Success' });
-  } catch (error) {
-    console.error('Get all locations error:', error);
-    res.status(500).json({ data: null, message: error.message });
-  }
-});
-
 app.post('/api/Location/get-all-locations', async (req, res) => {
   try {
     // Get unique arrival locations from flights
@@ -1661,3 +1624,4 @@ app.listen(port, () => {
   console.log(`Server running on port ${port}`);
   console.log(`API endpoints available at http://localhost:${port}/api`);
 });
+
