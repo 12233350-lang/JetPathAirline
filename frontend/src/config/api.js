@@ -1,7 +1,7 @@
 // API Configuration
 // Uses environment variable for API base URL
 // Defaults to the Node.js backend URL for development
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
+const API_BASE_URL = 'https://jetpathairline.onrender.com';
 
 export const API_ENDPOINTS = {
   // Auth endpoints
@@ -10,16 +10,16 @@ export const API_ENDPOINTS = {
   LOGOUT: `${API_BASE_URL}/api/Login/logout`,
   GET_NAME: `${API_BASE_URL}/api/Login/get-name`,
   GET_ID: `${API_BASE_URL}/api/Login/get-id`,
-  GET_USER_BY_ID: (id) => `${API_BASE_URL}/api/Login/get-user-by-id${id}`,
+  GET_USER_BY_ID: (id) => `${API_BASE_URL}/api/Login/get-user-by-id/${id}`,
   UPDATE_USER: `${API_BASE_URL}/api/Login/update-user`,
   UPDATE_FULL_USER: `${API_BASE_URL}/api/Login/update-full-user`,
 
   // Flight endpoints
   GET_ALL_FLIGHTS: `${API_BASE_URL}/api/Flight/get-all-flights`,
-  GET_FLIGHT_BY_ID: (id) => `${API_BASE_URL}/api/Flight/get-flight-by-id${id}`,
+  GET_FLIGHT_BY_ID: (id) => `${API_BASE_URL}/api/Flight/get-flight-by-id/${id}`,
 
   // User Flights endpoints
-  GET_USER_FLIGHTS_BY_ID: (id) => `${API_BASE_URL}/api/UserFlights/get-all-user-flights-by-id${id}`,
+  GET_USER_FLIGHTS_BY_ID: (id) => `${API_BASE_URL}/api/UserFlights/get-all-user-flights-by-id/${id}`,
   ADD_USER_FLIGHT: `${API_BASE_URL}/api/UserFlights/add-user-flight`,
   REMOVE_USER_FLIGHT: `${API_BASE_URL}/api/UserFlights/remove-user-flight-by-id`,
 
